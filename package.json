@@ -1,0 +1,10 @@
+{
+  "name": "cadastre-map",
+  "version": "1.0.0",
+  "description": "Cadastre Map Application",
+  "scripts": {
+    "build": "mkdir -p dist && cp -R index.html styles.css script.js data lib dist/"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

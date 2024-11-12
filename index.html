@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastre Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cadastre Map</h1>
+        </header>
+        <main>
+            <div class="search-container">
+                <select id="commune-select">
+                    <option value="">Select a commune</option>
+                    <option value="97121">97121</option>
+                    <option value="97129">97129</option>
+                    <option value="97111">97111</option>
+                </select>
+                <input type="number" id="contenance-input" placeholder="Contenance">
+                <input type="text" id="prefixe-input" placeholder="Prefixe">
+                <input type="text" id="section-input" placeholder="Section">
+                <input type="text" id="numero-input" placeholder="Numero">
+                <button id="search-btn">Search</button>
+            </div>
+            <div class="content">
+                <div id="map"></div>
+                <div id="results-list">
+                    <h2>Search Results</h2>
+                    <ul id="results"></ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>
