@@ -3,43 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastre Map</title>
+    <title>Cadastre Map Dynamique</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Cadastre Map</h1>
+            <h1>Cadastre Map Dynamique</h1>
         </header>
         <main>
             <div class="search-container">
-                <select id="commune-select">
-                    <option value="">Choisir une commune</option>
-                    <option value="85066">Chavagnes-les-Redoux</option>
-                    <option value="97121">Pointe-Noire</option>
-                    <option value="97129">Sainte-Rose</option>
-                    <option value="97111">Deshaies</option>
-                </select>
+                <input type="text" id="commune-search" placeholder="Nom de la commune">
+                <div id="commune-suggestions"></div>
                 <input type="number" id="contenance-input" placeholder="Contenance">
                 <input type="text" id="prefixe-input" placeholder="Prefixe">
                 <input type="text" id="section-input" placeholder="Section">
                 <input type="text" id="numero-input" placeholder="Numero">
                 <label for="include-adjacent">
-                    <input type="checkbox" id="include-adjacent"> Mitoyens
+                    <input type="checkbox" id="include-adjacent"> Inclure terrains mitoyens
                 </label>
-                <button id="search-btn">Search</button>
+                <button id="search-btn">Rechercher</button>
             </div>
-            <div class="content">
-                <div id="map"></div>
+            <div class="content-wrapper">
                 <div id="results-list">
-                    <h2>Search Results</h2>
+                    <h2>Résultats de recherche</h2>
                     <ul id="results"></ul>
                 </div>
+                <div id="map"></div>
             </div>
         </main>
     </div>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
