@@ -1,6 +1,6 @@
 let map;
 let geojsonLayer;
-const communes = ['97121', '97129', '97111'];
+const communes = ['85066','97121', '97129', '97111'];
 
 function initMap() {
     map = L.map('map').setView([16.25, -61.58], 10);
