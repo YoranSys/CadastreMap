@@ -71,87 +71,143 @@ function loadGeoJSON(commune) {
 }
 
 
+
 function searchParcelles() {
     const commune = document.getElementById('commune-select').value;
     const contenance = document.getElementById('contenance-input').value;
     const prefixe = document.getElementById('prefixe-input').value;
     const section = document.getElementById('section-input').value;
     const numero = document.getElementById('numero-input').value;
+    const includeAdjacent = document.getElementById('include-adjacent').checked;
 
     if (!commune) {
-        alert('Please select a commune');
+        alert('Veuillez sélectionner une commune');
         return;
     }
 
     fetch(`./data/cadastre-${commune}-parcelles.json`)
-    .then(response => response.json())
-    .then(data => {
-        let filteredFeatures = data.features.filter(feature => {
-            return (
-                (!prefixe || feature.properties.prefixe === prefixe) &&
-                (!section || feature.properties.section === section) &&
-                (!numero || feature.properties.numero === numero)
-            );
-        });
+        .then(response => response.json())
+        .then(data => {
+            let filteredFeatures = data.features.filter(feature => {
+                return (
+                    (!prefixe || feature.properties.prefixe === prefixe) &&
+                    (!section || feature.properties.section === section) &&
+                    (!numero || feature.properties.numero === numero)
+                );
+            });
 
-        let inaccurateSearch = false;
+            let inaccurateSearch = false;
+            let adjacentPairs = [];
 
-        if (contenance) {
-            const exactMatches = filteredFeatures.filter(feature =>
-            feature.properties.contenance == contenance
-            );
-
-            if (exactMatches.length === 0) {
-                inaccurateSearch = true;
+            if (contenance) {
                 const contenanceValue = parseFloat(contenance);
-                filteredFeatures = filteredFeatures.filter(feature => {
-                    const featureContenance = parseFloat(feature.properties.contenance);
-                    return featureContenance >= (contenanceValue - 10) && featureContenance <= (contenanceValue + 10);
-                });
+                const exactMatches = filteredFeatures.filter(feature => 
+                    parseFloat(feature.properties.contenance) === contenanceValue
+                );
+
+                if (exactMatches.length === 0 && includeAdjacent) {
+                    adjacentPairs = findAdjacentPairs(filteredFeatures, contenanceValue);
+                    if (adjacentPairs.length > 0) {
+                        filteredFeatures = adjacentPairs.flat();
+                    } else {
+                        inaccurateSearch = true;
+                        filteredFeatures = filteredFeatures.filter(feature => {
+                            const featureContenance = parseFloat(feature.properties.contenance);
+                            return featureContenance >= (contenanceValue - 10) && featureContenance <= (contenanceValue + 10);
+                        });
+                    }
+                } else if (exactMatches.length === 0) {
+                    inaccurateSearch = true;
+                    filteredFeatures = filteredFeatures.filter(feature => {
+                        const featureContenance = parseFloat(feature.properties.contenance);
+                        return featureContenance >= (contenanceValue - 10) && featureContenance <= (contenanceValue + 10);
+                    });
+                } else {
+                    filteredFeatures = exactMatches;
+                }
+            }
+
+            if (geojsonLayer) {
+                map.removeLayer(geojsonLayer);
+            }
+
+            geojsonLayer = L.geoJSON({
+                type: 'FeatureCollection',
+                features: filteredFeatures
+            }, {
+                style: {
+                    fillColor: '#ff7800',
+                    weight: 1,
+                    opacity: 1,
+                    color: 'white',
+                    fillOpacity: 0.7
+                },
+                onEachFeature: (feature, layer) => {
+                    layer.bindPopup(createPopupContent(feature));
+                }
+            }).addTo(map);
+
+            if (filteredFeatures.length > 0) {
+                map.fitBounds(geojsonLayer.getBounds());
+                displayResults(filteredFeatures, inaccurateSearch, adjacentPairs);
             } else {
-                filteredFeatures = exactMatches;
+                alert('Aucune parcelle trouvée correspondant aux critères de recherche');
+                clearResults();
             }
-        }
-
-        if (geojsonLayer) {
-            map.removeLayer(geojsonLayer);
-        }
-
-        geojsonLayer = L.geoJSON({
-            type: 'FeatureCollection',
-            features: filteredFeatures
-        }, {
-            style: {
-                fillColor: '#ff7800',
-                weight: 1,
-                opacity: 1,
-                color: 'white',
-                fillOpacity: 0.7
-            },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(createPopupContent(feature));
-            }
-        }).addTo(map);
-
-        if (filteredFeatures.length > 0) {
-            map.fitBounds(geojsonLayer.getBounds());
-            displayResults(filteredFeatures, inaccurateSearch);
-        } else {
-            alert('No parcelles found matching the search criteria');
-            clearResults();
-        }
-    });
+        });
 }
 
-function displayResults(features, inaccurateSearch) {
+function findAdjacentPairs(features, targetContenance) {
+    const pairs = [];
+    for (let i = 0; i < features.length; i++) {
+        for (let j = i + 1; j < features.length; j++) {
+            const contenance1 = parseFloat(features[i].properties.contenance);
+            const contenance2 = parseFloat(features[j].properties.contenance);
+            if (contenance1 + contenance2 === targetContenance && areAdjacent(features[i], features[j])) {
+                pairs.push([features[i], features[j]]);
+            }
+        }
+    }
+    return pairs;
+}
+
+function areAdjacent(feature1, feature2) {
+    // Cette fonction est une simplification. Une implémentation plus précise 
+    // nécessiterait une analyse géométrique détaillée.
+    const coords1 = feature1.geometry.coordinates[0];
+    const coords2 = feature2.geometry.coordinates[0];
+    
+    for (let i = 0; i < coords1.length; i++) {
+        for (let j = 0; j < coords2.length; j++) {
+            if (arePointsClose(coords1[i], coords2[j])) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function arePointsClose(point1, point2) {
+    const threshold = 0.001; // Ajustez selon la précision nécessaire
+    return Math.abs(point1[0] - point2[0]) < threshold && Math.abs(point1[1] - point2[1]) < threshold;
+}
+
+function displayResults(features, inaccurateSearch, adjacentPairs) {
     const resultsList = document.getElementById('results');
     resultsList.innerHTML = '';
 
     if (inaccurateSearch) {
         const warningDiv = document.createElement('div');
         warningDiv.className = 'warning';
-        warningDiv.textContent = 'Warning: Showing approximate results for contenance (±10 range).';
+        warningDiv.textContent = 'Attention : Affichage des résultats approximatifs pour la contenance (plage de ±10).';
         resultsList.appendChild(warningDiv);
+    }
+
+    if (adjacentPairs.length > 0) {
+        const adjacentDiv = document.createElement('div');
+        adjacentDiv.className = 'info';
+        adjacentDiv.textContent = 'Terrains mitoyens trouvés correspondant à la contenance totale demandée.';
+        resultsList.appendChild(adjacentDiv);
     }
 
     features.forEach((feature, index) => {

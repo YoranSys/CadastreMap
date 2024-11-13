@@ -26,6 +26,15 @@ h1 {
     margin-bottom: 20px;
 }
 
+.info {
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
 select, input, button {
     padding: 10px;
     font-size: 16px;
