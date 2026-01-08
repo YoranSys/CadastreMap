@@ -1,0 +1,9 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#4CAF50"/>
+  <path d="M 256 100 L 400 200 L 400 400 L 112 400 L 112 200 Z" fill="white" stroke="#333" stroke-width="8"/>
+  <rect x="200" y="250" width="60" height="80" fill="#333"/>
+  <rect x="252" y="250" width="60" height="80" fill="#333"/>
+  <rect x="140" y="180" width="50" height="50" fill="#87CEEB"/>
+  <rect x="322" y="180" width="50" height="50" fill="#87CEEB"/>
+  <text x="256" y="470" font-family="Arial" font-size="48" fill="white" text-anchor="middle" font-weight="bold">CM</text>
+</svg>

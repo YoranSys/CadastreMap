@@ -1,37 +1,62 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
 }
 
 header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    padding: 10px 0;
 }
 
 h1 {
     color: #333;
+    font-size: 1.5rem;
+    margin: 0;
 }
 
 .search-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 select, input, button {
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
+    width: 100%;
+}
+
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
 }
 
 button {
@@ -39,39 +64,60 @@ button {
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-weight: 600;
+    border: none;
+    min-height: 44px;
 }
 
-button:hover {
+button:hover, button:active {
     background-color: #45a049;
 }
 
 #map {
-    height: 500px;
+    height: 400px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    width: 100%;
 }
 
 #results-list {
     background-color: white;
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#results-list h2 {
+    font-size: 1.2rem;
+    margin: 0 0 10px 0;
+    color: #333;
 }
 
 #results {
     list-style-type: none;
     padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 #results li {
-    padding: 10px;
+    padding: 12px;
     border-bottom: 1px solid #eee;
     cursor: pointer;
+    transition: background-color 0.2s;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 
-#results li:hover {
+#results li:hover, #results li:active {
     background-color: #f0f0f0;
+}
+
+#results li:last-child {
+    border-bottom: none;
 }
 
 .warning {
@@ -96,17 +142,29 @@ button:hover {
     position: absolute;
     background-color: white;
     border: 1px solid #ccc;
-    max-height: 200px;
+    border-radius: 6px;
+    max-height: 250px;
     overflow-y: auto;
     z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    width: calc(100% - 30px);
+    max-width: 400px;
 }
 
 #commune-suggestions div {
-    padding: 5px 10px;
+    padding: 12px;
     cursor: pointer;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-#commune-suggestions div:hover {
+#commune-suggestions div:last-child {
+    border-bottom: none;
+}
+
+#commune-suggestions div:hover, #commune-suggestions div:active {
     background-color: #f0f0f0;
 }
 
@@ -114,25 +172,84 @@ button:hover {
 
 .content-wrapper {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    gap: 15px;
 }
 
-#results-list {
-    flex: 1;
-    min-width: 300px;
-}
+/* Tablet and larger screens */
+@media (min-width: 768px) {
+    .container {
+        padding: 20px;
+    }
 
-#map {
-    flex: 2;
-    height: 500px;
-}
+    h1 {
+        font-size: 2rem;
+    }
 
-@media (max-width: 768px) {
+    .search-container {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 20px;
+        gap: 15px;
+    }
+
+    #commune-search {
+        grid-column: 1 / -1;
+    }
+
+    button {
+        grid-column: 1 / -1;
+    }
+
     .content-wrapper {
-        flex-direction: column;
+        flex-direction: row;
+    }
+
+    #results-list {
+        flex: 1;
+        min-width: 300px;
     }
 
     #map {
-        height: 300px;
+        flex: 2;
+        height: 500px;
+    }
+
+    #results {
+        max-height: 500px;
+    }
+}
+
+/* Desktop and larger screens */
+@media (min-width: 1024px) {
+    .search-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    #commune-search {
+        grid-column: 1 / -1;
+    }
+
+    button {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    button:hover {
+        background-color: #4CAF50;
+    }
+
+    button:active {
+        background-color: #45a049;
+        transform: scale(0.98);
+    }
+
+    #results li:hover {
+        background-color: white;
+    }
+
+    #results li:active {
+        background-color: #f0f0f0;
     }
 }
