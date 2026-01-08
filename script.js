@@ -300,8 +300,8 @@ function displayResults(features, inaccurateSearch, adjacentPairs, codeInsee) {
         const li = document.createElement('li');
         li.textContent = `📍 Parcelle ${index + 1}: ${feature.properties.prefixe} ${feature.properties.section} ${feature.properties.numero} (Contenance: ${feature.properties.contenance})`;
         li.addEventListener('click', () => focusOnParcelle(feature, codeInsee));
+        li.classList.add('result-item-animate');
         li.style.animationDelay = `${index * 0.05}s`;
-        li.style.animation = 'fadeInUp 0.3s ease-out both';
         resultsList.appendChild(li);
     });
 }
