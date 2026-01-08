@@ -4,8 +4,8 @@
   "description": "Application pour visualiser et rechercher des parcelles cadastrales en France",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f0f0f0",
-  "theme_color": "#4CAF50",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
   "orientation": "any",
   "icons": [
     {
