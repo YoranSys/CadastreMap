@@ -66,7 +66,7 @@ function setupCommuneSearch() {
                 (commune.nom && normalizeForSearch(commune.nom).includes(searchTerm)) ||
                 (commune.codePostal && commune.codePostal.replace(/[^a-z0-9]/g, '').includes(searchTerm))
             )
-            .sort((a, b) => a.nom.localeCompare(b.nom));
+            .sort((a, b) => (a.nom || '').localeCompare(b.nom || ''));
 
         communeSuggestions.innerHTML = '';
         suggestions.forEach(commune => {
