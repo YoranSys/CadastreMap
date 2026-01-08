@@ -2,6 +2,21 @@ let map;
 let geojsonLayer;
 let communeData = [];
 
+// Map parcel style constants
+const PARCEL_STYLE = {
+    fillColor: '#667eea',
+    weight: 2,
+    opacity: 1,
+    color: '#764ba2',
+    fillOpacity: 0.6
+};
+
+const PARCEL_HOVER_STYLE = {
+    fillColor: '#764ba2',
+    fillOpacity: 0.8,
+    weight: 3
+};
+
 function initMap() {
     map = L.map('map').setView([46.603354, 1.888334], 6); // Center of France
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -157,28 +172,14 @@ async function searchParcelles() {
             type: 'FeatureCollection',
             features: filteredFeatures
         }, {
-            style: {
-                fillColor: '#667eea',
-                weight: 2,
-                opacity: 1,
-                color: '#764ba2',
-                fillOpacity: 0.6
-            },
+            style: PARCEL_STYLE,
             onEachFeature: (feature, layer) => {
                 layer.bindPopup(createPopupContent(feature, codeInsee));
                 layer.on('mouseover', function() {
-                    this.setStyle({
-                        fillColor: '#764ba2',
-                        fillOpacity: 0.8,
-                        weight: 3
-                    });
+                    this.setStyle(PARCEL_HOVER_STYLE);
                 });
                 layer.on('mouseout', function() {
-                    this.setStyle({
-                        fillColor: '#667eea',
-                        fillOpacity: 0.6,
-                        weight: 2
-                    });
+                    this.setStyle(PARCEL_STYLE);
                 });
             }
         }).addTo(map);
