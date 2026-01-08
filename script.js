@@ -50,11 +50,21 @@ function setupCommuneSearch() {
     const communeSearch = document.getElementById('commune-search');
     const communeSuggestions = document.getElementById('commune-suggestions');
 
+    // Normalize text for search by handling common abbreviations
+    const normalizeForSearch = (text) => {
+        return text
+            .toLowerCase()
+            .replace(/\bsainte\b/g, 'ste')  // Normalize "Sainte" to "Ste"
+            .replace(/\bsaint\b/g, 'st')    // Normalize "Saint" to "St"
+            .replace(/[^a-z0-9]/g, '');
+    };
+
     communeSearch.addEventListener('input', () => {
-        const searchTerm = communeSearch.value.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const searchTerm = normalizeForSearch(communeSearch.value);
         const suggestions = communeData
             .filter(commune => 
-                commune.nom && commune.nom.toLowerCase().replace(/[^a-z0-9]/g, '').includes(searchTerm)
+                (commune.nom && normalizeForSearch(commune.nom).includes(searchTerm)) ||
+                (commune.codePostal && commune.codePostal.replace(/[^a-z0-9]/g, '').includes(searchTerm))
             )
             .slice(0, 5);
 
