@@ -1,12 +1,12 @@
 const CACHE_NAME = 'cadastremap-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
+  './',
+  './index.html',
+  './styles.css',
+  './script.js',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
   'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js',
   'https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js'
@@ -90,7 +90,7 @@ self.addEventListener('fetch', (event) => {
           return response;
         }).catch(() => {
           // Return a custom offline page if available
-          return caches.match('/index.html');
+          return caches.match('./index.html');
         });
       })
   );

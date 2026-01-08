@@ -2,7 +2,7 @@
   "name": "Cadastre Map Dynamique",
   "short_name": "CadastreMap",
   "description": "Application pour visualiser et rechercher des parcelles cadastrales en France",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#f0f0f0",
   "theme_color": "#4CAF50",
