@@ -54,7 +54,8 @@ function setupCommuneSearch() {
         const searchTerm = communeSearch.value.toLowerCase().replace(/[^a-z0-9]/g, '');
         const suggestions = communeData
             .filter(commune => 
-                commune.nom && commune.nom.toLowerCase().replace(/[^a-z0-9]/g, '').includes(searchTerm)
+                (commune.nom && commune.nom.toLowerCase().replace(/[^a-z0-9]/g, '').includes(searchTerm)) ||
+                (commune.codePostal && commune.codePostal.replace(/[^a-z0-9]/g, '').includes(searchTerm))
             )
             .slice(0, 5);
 
