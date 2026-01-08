@@ -1,7 +1,7 @@
 {
-  "name": "Cadastre Map Dynamique",
+  "name": "CadastreMap - Visualisation Parcelles Cadastrales",
   "short_name": "CadastreMap",
-  "description": "Application pour visualiser et rechercher des parcelles cadastrales en France",
+  "description": "Application web progressive pour rechercher et visualiser les parcelles cadastrales françaises avec carte interactive, filtrage avancé, détection de terrains mitoyens et accès aux données DVF et Géoportail",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#667eea",
