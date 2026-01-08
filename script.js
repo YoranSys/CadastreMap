@@ -98,6 +98,11 @@ async function searchParcelles() {
         return;
     }
 
+    const searchBtn = document.getElementById('search-btn');
+    const originalText = searchBtn.textContent;
+    searchBtn.textContent = '⏳ Recherche en cours...';
+    searchBtn.disabled = true;
+
     try {
         const data = await fetchCadastreData(codeInsee);
         if (!data || !data.features || data.features.length === 0) {
@@ -153,14 +158,28 @@ async function searchParcelles() {
             features: filteredFeatures
         }, {
             style: {
-                fillColor: '#ff7800',
-                weight: 1,
+                fillColor: '#667eea',
+                weight: 2,
                 opacity: 1,
-                color: 'white',
-                fillOpacity: 0.7
+                color: '#764ba2',
+                fillOpacity: 0.6
             },
             onEachFeature: (feature, layer) => {
                 layer.bindPopup(createPopupContent(feature, codeInsee));
+                layer.on('mouseover', function() {
+                    this.setStyle({
+                        fillColor: '#764ba2',
+                        fillOpacity: 0.8,
+                        weight: 3
+                    });
+                });
+                layer.on('mouseout', function() {
+                    this.setStyle({
+                        fillColor: '#667eea',
+                        fillOpacity: 0.6,
+                        weight: 2
+                    });
+                });
             }
         }).addTo(map);
 
@@ -173,6 +192,9 @@ async function searchParcelles() {
         }
     } catch (error) {
         alert(error.message);
+    } finally {
+        searchBtn.textContent = originalText;
+        searchBtn.disabled = false;
     }
 }
 
@@ -236,13 +258,22 @@ function createPopupContent(feature, codeInsee) {
     const geoportailUrbanismeLink = generateGeoportailUrbanismeLink(lat, lon);
     const geoportailLink = generateGeoportailLink(lat, lon);
     return `
-        Contenance: ${feature.properties.contenance}<br>
-        Prefixe: ${feature.properties.prefixe}<br>
-        Section: ${feature.properties.section}<br>
-        Numero: ${feature.properties.numero}<br>
-        <a href="${dvfLink}" target="_blank">View DVF Data</a><br>
-        <a href="${geoportailUrbanismeLink}" target="_blank">View on Géoportail de l'urbanisme</a><br>
-        <a href="${geoportailLink}" target="_blank">View on Géoportail</a>
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <div style="margin-bottom: 12px;">
+                <strong style="color: #2d3748; font-size: 16px;">📍 Informations Parcelle</strong>
+            </div>
+            <div style="color: #4a5568; line-height: 1.8;">
+                <div style="margin-bottom: 6px;"><strong>Contenance:</strong> ${feature.properties.contenance}</div>
+                <div style="margin-bottom: 6px;"><strong>Prefixe:</strong> ${feature.properties.prefixe}</div>
+                <div style="margin-bottom: 6px;"><strong>Section:</strong> ${feature.properties.section}</div>
+                <div style="margin-bottom: 12px;"><strong>Numero:</strong> ${feature.properties.numero}</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+                <a href="${dvfLink}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500; padding: 8px 12px; background: rgba(102, 126, 234, 0.1); border-radius: 6px; display: inline-block; transition: all 0.2s;">🔍 View DVF Data</a>
+                <a href="${geoportailUrbanismeLink}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500; padding: 8px 12px; background: rgba(102, 126, 234, 0.1); border-radius: 6px; display: inline-block; transition: all 0.2s;">🏙️ Géoportail de l'urbanisme</a>
+                <a href="${geoportailLink}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500; padding: 8px 12px; background: rgba(102, 126, 234, 0.1); border-radius: 6px; display: inline-block; transition: all 0.2s;">🗺️ View on Géoportail</a>
+            </div>
+        </div>
     `;
 }
 
@@ -266,8 +297,10 @@ function displayResults(features, inaccurateSearch, adjacentPairs, codeInsee) {
 
     features.forEach((feature, index) => {
         const li = document.createElement('li');
-        li.textContent = `Parcelle ${index + 1}: ${feature.properties.prefixe} ${feature.properties.section} ${feature.properties.numero} (Contenance: ${feature.properties.contenance})`;
+        li.textContent = `📍 Parcelle ${index + 1}: ${feature.properties.prefixe} ${feature.properties.section} ${feature.properties.numero} (Contenance: ${feature.properties.contenance})`;
         li.addEventListener('click', () => focusOnParcelle(feature, codeInsee));
+        li.style.animationDelay = `${index * 0.05}s`;
+        li.style.animation = 'fadeInUp 0.3s ease-out both';
         resultsList.appendChild(li);
     });
 }
