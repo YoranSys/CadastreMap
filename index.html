@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Application pour visualiser et rechercher des parcelles cadastrales en France">
-    <meta name="theme-color" content="#4CAF50">
+    <meta name="theme-color" content="#667eea">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="CadastreMap">
@@ -14,30 +14,39 @@
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Cadastre Map Dynamique</h1>
+            <h1>📍 Cadastre Map Dynamique</h1>
+            <p style="color: #718096; margin-top: 12px; font-size: 1.1rem; font-weight: 400;">Recherchez et visualisez les parcelles cadastrales en France</p>
         </header>
         <main>
             <div class="search-container">
-                <input type="text" id="commune-search" placeholder="Nom de la commune">
-                <div id="commune-suggestions"></div>
-                <input type="number" id="contenance-input" placeholder="Contenance">
-                <input type="text" id="prefixe-input" placeholder="Prefixe">
-                <input type="text" id="section-input" placeholder="Section">
-                <input type="text" id="numero-input" placeholder="Numero">
+                <div style="position: relative;">
+                    <input type="text" id="commune-search" placeholder="🏘️ Nom de la commune" style="padding-left: 18px;">
+                    <div id="commune-suggestions"></div>
+                </div>
+                <input type="number" id="contenance-input" placeholder="📏 Contenance" style="padding-left: 18px;">
+                <input type="text" id="prefixe-input" placeholder="🔤 Prefixe" style="padding-left: 18px;">
+                <input type="text" id="section-input" placeholder="📋 Section" style="padding-left: 18px;">
+                <input type="text" id="numero-input" placeholder="🔢 Numero" style="padding-left: 18px;">
                 <label for="include-adjacent">
                     <input type="checkbox" id="include-adjacent"> Inclure terrains mitoyens
                 </label>
-                <button id="search-btn">Rechercher</button>
+                <button id="search-btn">🔍 Rechercher</button>
             </div>
             <div class="content-wrapper">
                 <div id="results-list">
-                    <h2>Résultats de recherche</h2>
-                    <ul id="results"></ul>
+                    <h2>📊 Résultats de recherche</h2>
+                    <ul id="results">
+                        <li class="empty-state">
+                            <div class="empty-state-icon">🗺️</div>
+                            <div>Effectuez une recherche pour voir les parcelles</div>
+                        </li>
+                    </ul>
                 </div>
                 <div id="map"></div>
             </div>
